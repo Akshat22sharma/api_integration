@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <label for="login_id">Email:</label>
+    <input type="email" id="login_id" name="login_id" required>
+    <br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+    <br>
+    <button type="submit">Login</button>
+  </form>
+
+  <script>
+    const loginForm = document.getElementById('loginForm');
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(loginForm);
+      const credentials = {
+        login_id: formData.get('login_id'),
+        password: formData.get('password'),
+      };
+
+      try {
+        
+        const token = await simulateAuthenticationAPI(credentials);
+        
+        console.log('Authentication successful! Bearer token:', token);
+        
+        localStorage.setItem('bearerToken', token);
+        
+      } catch (error) {
+        console.error('Authentication failed. Invalid credentials.');
+      }
+    });
+
+    
+    async function simulateAuthenticationAPI(credentials) {
+      
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (credentials.login_id === 'test@sunbasedata.com' && credentials.password === 'Test@123') {
+            resolve('dummy_bearer_token');
+          } else {
+            reject(new Error('Invalid credentials'));
+          }
+        }, 1000); 
+      });
+    }
+  </script>
+</body>
+</html>
+
+
+

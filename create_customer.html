@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Create Customer</title>
+</head>
+<body>
+  <h1>Create Customer</h1>
+  <form id="createCustomerForm">
+    <label for="first_name">First Name:</label>
+    <input type="text" id="first_name" name="first_name" required>
+    <br>
+    <label for="last_name">Last Name:</label>
+    <input type="text" id="last_name" name="last_name" required>
+    <br>
+    <!-- Add other customer details (street, address, city, state, email, phone) as required -->
+    <button type="submit">Create</button>
+  </form>
+
+  <script>
+    const createCustomerForm = document.getElementById('createCustomerForm');
+
+    createCustomerForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(createCustomerForm);
+      const customerData = {
+        first_name: formData.get('first_name'),
+        last_name: formData.get('last_name'),
+        
+      };
+
+      
+      const bearerToken = localStorage.getItem('bearerToken');
+      
+      if (bearerToken) {
+        try {
+          
+          const response = await simulateCreateCustomerAPI(bearerToken, customerData);
+          if (response.status === 201) {
+            console.log('Customer created successfully.');
+           
+          } else if (response.status === 400) {
+            console.error('First Name or Last Name is missing.');
+          } else {
+            console.error('Failed to create customer:', response.status);
+          }
+        } catch (error) {
+          console.error('An error occurred while creating the customer:', error);
+        }
+      } else {
+        console.error('Bearer token not found. Please log in first.');
+      }
+    });
+
+    async function simulateCreateCustomerAPI(bearerToken, customerData) {
+      
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          const response = {
+            status: 201, 
+          };
+          resolve(response);
+        }, 1000); 
+      });
+    }
+  </script>
+</body>
+</html>
